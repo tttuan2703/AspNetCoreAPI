@@ -1,0 +1,2 @@
+# AspNetCoreAPI
+ custom NoSQL
