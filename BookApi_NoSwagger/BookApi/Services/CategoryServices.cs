@@ -1,4 +1,5 @@
 ﻿using BookApi.Models;
+using BookApi.Models.DatabaseSettings;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ namespace BookApi.Services
 {
     public class CategoryServices
     {
-        private readonly IMongoCollection<CategoryBook> _category;
+        protected readonly IMongoCollection<CategoryBook> _category;
         public CategoryServices(ICategoryBookDatabaseSettings settings)
         {
             var client = new MongoClient(settings.CB_ConnectionString);
