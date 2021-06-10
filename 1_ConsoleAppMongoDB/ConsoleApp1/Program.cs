@@ -1,9 +1,7 @@
-﻿using System;
-using System.Text;
-using System.Threading.Tasks;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Driver;
-using MongoDB.Driver.Linq;
+using System;
+using System.Threading.Tasks;
 
 
 namespace ConsoleApp1

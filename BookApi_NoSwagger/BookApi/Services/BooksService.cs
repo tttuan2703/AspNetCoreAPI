@@ -1,10 +1,9 @@
-﻿using System;
+﻿using BookApi.Models;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BookApi.Models;
-using MongoDB.Bson;
-using MongoDB.Driver;
 
 namespace BookApi.Services
 {
@@ -12,7 +11,7 @@ namespace BookApi.Services
     {
         private readonly IMongoCollection<Book> _books;
         private readonly IMongoCollection<CategoryBook> _category;
-        public BooksService (IBookstoreDatabaseSettings settings, ICategoryBookDatabaseSettings category)
+        public BooksService(IBookstoreDatabaseSettings settings, ICategoryBookDatabaseSettings category)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
@@ -54,7 +53,7 @@ namespace BookApi.Services
         public async Task<BookDetails> BookDetails(string bookId)
         {
             var book = await _books.Find(book => book.Id == bookId).FirstOrDefaultAsync();
-            if(book != null)
+            if (book != null)
             {
                 var result = new BookDetails
                 {
@@ -64,7 +63,7 @@ namespace BookApi.Services
                     Author = book.Author
                 };
                 var categoryBook = await _category.Find(c => c.name == book.Category).FirstOrDefaultAsync();
-                if(categoryBook != null)
+                if (categoryBook != null)
                 {
                     result.CategoryName = categoryBook.name;
                     result.CategoryId = categoryBook.Id;
@@ -83,7 +82,7 @@ namespace BookApi.Services
             await _books.DeleteOneAsync(book => book.Id == bookIn.Id);
         public async Task<DeleteResult> Remove(string id) =>
             await _books.DeleteOneAsync(book => book.Id == id);
-        public async Task<DeleteResult>  RemoveAll() =>
+        public async Task<DeleteResult> RemoveAll() =>
             await _books.DeleteManyAsync(new BsonDocument());
     }
 }

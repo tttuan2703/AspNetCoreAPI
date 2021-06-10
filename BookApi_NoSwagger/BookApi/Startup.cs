@@ -38,7 +38,7 @@ namespace BookApi
                 app.UseDeveloperExceptionPage();
             }
             app.UseHttpsRedirection();
-            
+
             app.UseRouting();
             app.UseAuthorization();
 

@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using BookApi.Models;
+﻿using BookApi.Models;
 using BookApi.Services;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BookApi.Controllers
 {
@@ -17,7 +17,8 @@ namespace BookApi.Controllers
             _booksService = booksService;
         }
         //[HttpGet]
-        public Task<string> Get() {
+        public Task<string> Get()
+        {
             return this.GetBooks();
         }
         //[HttpGet]
@@ -36,29 +37,30 @@ namespace BookApi.Controllers
         public async Task<string> GetBooks()
         {
             var books = await _booksService.Get();
-            if(books==null)
+            if (books == null)
                 return "Invalid Id !!!";
             return JsonConvert.SerializeObject(books);
         }
         [HttpPost]
-        public async Task<string> Create (Book book)
+        public async Task<string> Create(Book book)
         {
             await _booksService.Create(book);
             CreatedAtRoute("GetBook", new { id = book.Id.ToString() }, book);
             return "";
         }
         [HttpPut("{id:length(24)}")]
-        public async Task<string> Update(string id,[FromBody] Book bookIn)
+        public async Task<string> Update(string id, [FromBody] Book bookIn)
         {
             var _book = _booksService.Get(id);
-            if(_book == null)
+            if (_book == null)
             {
                 return "Invalid id!!!";
             }
             return await _booksService.Update(id, bookIn);
         }
         [HttpDelete("{id:length(24)}")]
-        public async Task<string> Delete(string id) {
+        public async Task<string> Delete(string id)
+        {
             var book = _booksService.Get(id);
             if (book == null)
                 return "Invalid id !!!";
@@ -66,7 +68,7 @@ namespace BookApi.Controllers
             return "";
         }
         [HttpDelete]
-        public async Task<string> DeleteAll ()
+        public async Task<string> DeleteAll()
         {
             await _booksService.RemoveAll();
             return "";
