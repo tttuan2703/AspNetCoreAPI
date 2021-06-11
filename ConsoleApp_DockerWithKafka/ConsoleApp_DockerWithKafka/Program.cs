@@ -1,7 +1,10 @@
 ﻿using Confluent.Kafka;
+using ConsoleApp_DockerWithKafka.Models;
+using ConsoleApp_DockerWithKafka.Repository;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +28,7 @@ namespace ConsoleApp_DockerWithKafka
     {
         private readonly ILogger<KafkaProcedurerHostedService> _logger;
         private IProducer<Null, string> _producer;
+        private AccountsServices _AccountServices = new AccountsServices();
         public KafkaProcedurerHostedService(ILogger<KafkaProcedurerHostedService> logger)
         {
             _logger = logger;
@@ -36,16 +40,28 @@ namespace ConsoleApp_DockerWithKafka
         }
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            for (var i = 0; i < 100; ++i)
+            //var value = $"Hello world{i}";
+            var accountView = new AccountViewModel()
             {
-                var value = $"Hello world{i}";
-                _logger.LogInformation(value);
-                await _producer.ProduceAsync("demo", new Message<Null, string>()
-                {
-                    Value = value
-                }, cancellationToken);
-                _producer.Flush(TimeSpan.FromSeconds(10));
-            }
+                FullName = "Tai Thanh Tuan",
+                DateOfBirth = new DateTime(2000, 03, 26),
+                Address = "128 LTT",
+                Phone = "0192912912",
+                Telephone = "0292930112",
+                Email = "ttt219@gmail.com",
+                Faceboook = "hhh",
+                UserName = "taikhoantest",
+                Password = "Pass@123",
+                ConfirmPassword = "Pass@123"
+            };
+            bool insert = await _AccountServices.createUser(accountView);
+            var value = JsonConvert.SerializeObject(accountView);
+            _logger.LogInformation(value);
+            await _producer.ProduceAsync("RegisterUser", new Message<Null, string>()
+            {
+                Value = value
+            }, cancellationToken);
+            _producer.Flush(TimeSpan.FromSeconds(10));
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

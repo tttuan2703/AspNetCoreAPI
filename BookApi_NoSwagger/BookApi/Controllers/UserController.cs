@@ -43,7 +43,6 @@ namespace BookApi.Controllers
         {
             AppUser appUser = new AppUser();
             appUser = _mapper.Map<AppUser>(user);
-
             await _users.createUser(appUser);
             //appUser._id = (new ObjectId())+"";
             CreatedAtRoute("GetBook", new { id = appUser._id.ToString() }, appUser);
