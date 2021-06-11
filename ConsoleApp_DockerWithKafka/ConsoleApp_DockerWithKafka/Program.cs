@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
+using System.Configuration;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -34,7 +35,7 @@ namespace ConsoleApp_DockerWithKafka
             _logger = logger;
             var config = new ProducerConfig()
             {
-                BootstrapServers = "localhost:9092"
+                BootstrapServers = ConfigurationSettings.AppSettings["BootstrapServers"]
             };
             _producer = new ProducerBuilder<Null, string>(config).Build();
         }
@@ -55,6 +56,10 @@ namespace ConsoleApp_DockerWithKafka
                 ConfirmPassword = "Pass@123"
             };
             bool insert = await _AccountServices.createUser(accountView);
+            if(insert == false)
+            {
+                return;
+            }
             var value = JsonConvert.SerializeObject(accountView);
             _logger.LogInformation(value);
             await _producer.ProduceAsync("RegisterUser", new Message<Null, string>()

@@ -67,8 +67,10 @@ namespace ConsoleApp_DockerWithKafka.Repository
         }
         public async Task<bool> createUser(AccountViewModel accountView)
         {
-            if (!checkValidateAccount(accountView).Equals(""))
+            string errorMess = checkValidateAccount(accountView);
+            if (!errorMess.Equals(""))
             {
+                Console.WriteLine("Error: "+errorMess);
                 return false;
             }
             //var accounts = _accounts.Find(account => true).ToList();
