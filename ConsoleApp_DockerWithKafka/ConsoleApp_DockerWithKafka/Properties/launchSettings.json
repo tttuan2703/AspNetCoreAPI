@@ -1,10 +1,11 @@
-//{
-//  "profiles": {
-//    "ConsoleApp_DockerWithKafka": {
-//      "commandName": "Project"
-//    },
-//    "Docker": {
-//      "commandName": "Docker"
-//    }
-//  }
-//}
+{
+  "profiles": {
+    "Start": {
+      "commandName": "Project",
+      "ErrorString": "Error reading JObject from JsonReader. Current JsonReader item is not an object: Comment. Path '', line 10, position 3."
+    },
+    "Project": {
+      "commandName": "Executable"
+    }
+  }
+}

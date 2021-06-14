@@ -70,7 +70,7 @@ namespace ConsoleApp_DockerWithKafka.Repository
             string errorMess = checkValidateAccount(accountView);
             if (!errorMess.Equals(""))
             {
-                Console.WriteLine("Error: "+errorMess);
+                Console.WriteLine("Error: " + errorMess);
                 return false;
             }
             //var accounts = _accounts.Find(account => true).ToList();

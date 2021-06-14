@@ -56,7 +56,7 @@ namespace ConsoleApp_DockerWithKafka
                 ConfirmPassword = "Pass@123"
             };
             bool insert = await _AccountServices.createUser(accountView);
-            if(insert == false)
+            if (insert == false)
             {
                 return;
             }
