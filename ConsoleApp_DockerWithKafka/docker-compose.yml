@@ -1,8 +1,8 @@
 version: '3.4'
+
 services:
   consoleapp_dockerwithkafka:
     image: ${DOCKER_REGISTRY-}consoleappdockerwithkafka
     build:
       context: .
       dockerfile: ConsoleApp_DockerWithKafka/Dockerfile
-      

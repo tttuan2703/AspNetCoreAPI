@@ -1,4 +1,11 @@
 version: '3.4'
 services:
-  consoleapp_dockerwithkafka: 
-  
+  #consoleapp_dockerwithkafka:
+  #  volumes:
+  #    - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+  redis:
+    image: "confluentinc/cp-kafka"

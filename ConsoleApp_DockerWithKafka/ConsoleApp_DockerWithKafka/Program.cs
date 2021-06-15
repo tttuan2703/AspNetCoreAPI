@@ -6,7 +6,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
-using System.Configuration;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,6 +16,7 @@ namespace ConsoleApp_DockerWithKafka
         static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
+            Console.ReadLine();
         }
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
@@ -35,38 +35,45 @@ namespace ConsoleApp_DockerWithKafka
             _logger = logger;
             var config = new ProducerConfig()
             {
-                BootstrapServers = ConfigurationSettings.AppSettings["BootstrapServers"]
+                BootstrapServers = "localhost:9092"
             };
             _producer = new ProducerBuilder<Null, string>(config).Build();
-        }
+        } //ConfigurationSettings.AppSettings["BootstrapServers"]
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            //var value = $"Hello world{i}";
-            var accountView = new AccountViewModel()
+            try
             {
-                FullName = "Tai Thanh Tuan",
-                DateOfBirth = new DateTime(2000, 03, 26),
-                Address = "128 LTT",
-                Phone = "0192912912",
-                Telephone = "0292930112",
-                Email = "ttt219@gmail.com",
-                Faceboook = "hhh",
-                UserName = "taikhoantest",
-                Password = "Pass@123",
-                ConfirmPassword = "Pass@123"
-            };
-            bool insert = await _AccountServices.createUser(accountView);
-            if (insert == false)
-            {
-                return;
+                //var value = $"Hello world{i}";
+                var accountView = new AccountViewModel()
+                {
+                    FullName = "Tai Thanh Tuan",
+                    DateOfBirth = new DateTime(2000, 03, 26),
+                    Address = "128 LTT",
+                    Phone = "0192912912",
+                    Telephone = "0292930112",
+                    Email = "ttt219@gmail.com",
+                    Faceboook = "hhh",
+                    UserName = "taikhoantest",
+                    Password = "Pass@123",
+                    ConfirmPassword = "Pass@123"
+                };
+                var value = JsonConvert.SerializeObject(accountView);
+                _logger.LogInformation(value);
+                await _producer.ProduceAsync("RegisterUser", new Message<Null, string>()
+                {
+                    Value = value
+                }, cancellationToken);
+                bool insert = await _AccountServices.createUser(accountView);
+                if (insert == false)
+                {
+                    return;
+                }
+                _producer.Flush(TimeSpan.FromSeconds(10));
             }
-            var value = JsonConvert.SerializeObject(accountView);
-            _logger.LogInformation(value);
-            await _producer.ProduceAsync("RegisterUser", new Message<Null, string>()
+            catch (Exception ex)
             {
-                Value = value
-            }, cancellationToken);
-            _producer.Flush(TimeSpan.FromSeconds(10));
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
