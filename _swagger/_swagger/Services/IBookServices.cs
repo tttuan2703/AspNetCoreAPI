@@ -1,8 +1,6 @@
 ﻿using _swagger.Models;
 using MongoDB.Driver;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace _swagger.Services
@@ -16,5 +14,7 @@ namespace _swagger.Services
         public Task<DeleteResult> RemoveAll();
         public Task<Book> GetBook(string id);
         public Task<IEnumerable<Book>> GetBooks();
+        public Task<List<BookFollowCategory>> GetListBookFollowCategorys();
+        public Task<List<BookFollowCategory>> GetBookFollowCategory(string categoryId);
     }
 }

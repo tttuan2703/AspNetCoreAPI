@@ -1,9 +1,6 @@
 ﻿using _swagger.Models;
 using MongoDB.Driver;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace _swagger.DataMongoDB
 {
@@ -13,11 +10,27 @@ namespace _swagger.DataMongoDB
         private IMongoDatabase Database { get; }
         public MyDB(string connectionString, string dbName)
         {
-            mongoClient = new MongoClient(connectionString);
+            MongoClientSettings settings = new MongoClientSettings();
+            settings.Server = new MongoServerAddress(connectionString, 27017);
+            mongoClient = new MongoClient(settings);
             Database = mongoClient.GetDatabase(dbName);
+
+            /*var url = new MongoUrl(connectionString);
+            mongoClient = new MongoClient(url);
+            Database = mongoClient.GetDatabase(dbName);*/
         }
-        public IMongoCollection<Book> GetBooksCollection() {
+        public IMongoCollection<Book> GetBooksCollection()
+        {
             return Database.GetCollection<Book>("Books");
+        }
+        public IMongoCollection<Account> GetAccountsCollection()
+        {
+            var accounts = Database.GetCollection<Account>("Accounts");
+            return accounts;
+        }
+        public IMongoCollection<CategoryBook> GetCategoryBookCollection()
+        {
+            return Database.GetCollection<CategoryBook>("CategoryBook");
         }
     }
 }
