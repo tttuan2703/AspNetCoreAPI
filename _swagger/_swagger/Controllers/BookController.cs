@@ -1,9 +1,7 @@
 ﻿using _swagger.Models;
 using _swagger.Services;
-using Confluent.Kafka;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -62,7 +60,7 @@ namespace _swagger.Controllers
         public IActionResult DeleteBook(string id)
         {
             _bookServices.Remove(id);
-            ConnectKafka.KafkaProcedurerHostedService.SendToKafka("DeleteBook", "Deleted ID Book: "+id);
+            ConnectKafka.KafkaProcedurerHostedService.SendToKafka("DeleteBook", "Deleted ID Book: " + id);
             return Ok(_bookServices.GetBooks().Result);
         }
         [HttpDelete()]

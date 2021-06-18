@@ -1,6 +1,5 @@
 ﻿using _swagger.Models;
 using MongoDB.Driver;
-using System;
 
 namespace _swagger.DataMongoDB
 {
