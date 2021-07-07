@@ -1,11 +1,8 @@
+using _swagger.ConnectKafka;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace _swagger
 {
@@ -21,6 +18,17 @@ namespace _swagger
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                }).ConfigureServices((context, collection) =>
+                {
+                    collection.AddHostedService<KafkaProcedurerHostedService>();
+                }).ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
                 });
+        /*ConfigureServices((context, collection) =>
+            {
+                collection.AddHostedService<KafkaProcedurerHostedService>();
+            }).*/
     }
 }
